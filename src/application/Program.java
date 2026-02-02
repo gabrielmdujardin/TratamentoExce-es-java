@@ -1,13 +1,53 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-void main() {
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    IO.println(String.format("Hello and welcome!"));
+package application;
 
-    for (int i = 1; i <= 5; i++) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        IO.println("i = " + i);
-    }
+import model.entities.Reservation;
+import model.exceptions.DomainException;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Scanner;
+
+public class Program {
+    static void main() {
+        Locale.setDefault(Locale.US);
+        Scanner sc = new Scanner(System.in);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+
+        try {
+            System.out.print("Numero do quarto: ");
+            int number = sc.nextInt();
+            System.out.print("Data de Check-in(dd/MM/yyyy): ");
+            Date checkIn = sdf.parse(sc.next());
+            System.out.print("Data de Check-out(dd/MM/yyyy): ");
+            Date checkOut = sdf.parse(sc.next());
+
+
+            Reservation reservation = new Reservation(checkIn, checkOut, number);
+            System.out.println("Reserva: " + reservation);
+
+            System.out.println();
+            System.out.println("Digite uma nova data para reserva: ");
+            System.out.print("Data de Check-in(dd/MM/yyyy):  ");
+            checkIn = sdf.parse(sc.next());
+            System.out.print("Data de Check-out(dd/MM/yyyy):  ");
+            checkOut = sdf.parse(sc.next());
+
+
+            reservation.updateDates(checkIn, checkOut);
+            System.out.println("Reserva: " + reservation);
+        }
+        catch (ParseException e){
+            System.out.println("Formato de data inválido.");
+        }
+        catch (DomainException x){
+            System.out.println("Erro na reserva: " + x.getMessage());
+        }
+        catch (RuntimeException e) {
+            System.out.println("Erro inesperado.");
+        }
+sc.close();
+}
 }
